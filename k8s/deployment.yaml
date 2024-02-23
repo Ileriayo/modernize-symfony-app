@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: symfony
+  namespace: default # Namespace to deploy the application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: symfony
+  template:
+    metadata:
+      labels:
+        app: symfony
+    spec:
+      # Image pull secret to access private registry
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: symfony
+          image: ileriayo/symfony:v1
+          ports:
+            - containerPort: 8000
