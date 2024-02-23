@@ -86,3 +86,16 @@ cd my_project/
 [4]: https://symfony.com/download
 [5]: https://symfony.com/book
 [6]: https://getcomposer.org/
+
+
+## Containerize Application
+
+1. Build docker image:  
+    ```
+    docker build . -t symfony
+    ```
+
+2. Test container by starting it:
+    ```
+    docker run -p 8000:8000 symfony
+    ```
