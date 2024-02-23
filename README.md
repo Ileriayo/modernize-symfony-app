@@ -92,10 +92,10 @@ cd my_project/
 
 1. Build docker image:  
     ```
-    docker build . -t symfony
+    docker build . -t symfony:v1
     ```
 
 2. Test container by starting it:
     ```
-    docker run -p 8000:8000 symfony
+    docker run -p 8000:8000 symfony:v1
     ```
