@@ -138,14 +138,21 @@ cd my_project/
     ```
     kubectl apply -f k8s/service.yaml
     ```
-    This Service object uses a Nodeport type. When running on a linux server for instance, the application will be accessible on `<node-ip>:<node-port>`. 
 
     When running locally you will have to port forward to access it via localhost -->  http://localhost:8000
     ```
     kubectl port-forward pod/symfony-6794fb6cff-5cfck 8000:8000
     ```
    
-4. Create HPA - Scaling issues
+4. You can include migration files and uncomment the initContainer portion of the code to run migration:
+    ```
+    initContainers:
+       - name: migration
+         image: ileriayo/symfony:v1
+         command: ['sh', '-c', 'composer require symfony/runtime && php bin/console doctrine:migrations:migrate --no-interaction']
+    ```
+
+5. Create HPA - Scaling issues
 
     When the load increases, we want to also have the pods automatically increase to match demand. Therefore if there is increased load, horizontal scaling deploys more pods to handle the said load. Similarly, if the load decreases, and the number of pods is above the configured minimum, the hpa will work to ensure that it scales down.
 

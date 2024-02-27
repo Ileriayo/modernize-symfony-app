@@ -15,10 +15,12 @@ spec:
       # Image pull secret to access private registry
       imagePullSecrets:
         - name: regcred
-      initContainers:
-        - name: migration
-          image: ileriayo/symfony:v1
-          command: ['sh', '-c', 'php bin/console doctrine:migrations:migrate --no-interaction']
+      ## Uncomment the following lines to run migration before starting the application
+      ## The demo application does not have migration files
+      # initContainers:
+      #   - name: migration
+      #     image: ileriayo/symfony:v1
+      #     command: ['sh', '-c', 'composer require symfony/runtime && php bin/console doctrine:migrations:migrate --no-interaction']
       containers:
         - name: symfony
           image: ileriayo/symfony:v1
