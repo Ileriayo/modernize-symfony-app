@@ -21,3 +21,10 @@ spec:
           image: ileriayo/symfony:v1
           ports:
             - containerPort: 8000
+          env: # If given more time, I will use K8s Secret object to store sensitive data
+            - name: APP_ENV
+              value: "dev"
+            - name: APP_SECRET
+              value: "2ca64f8d83b9e89f5f19d672841d6bb8"
+            - name: "DATABASE_URL"
+              value: "sqlite:///%kernel.project_dir%/data/database.sqlite"
