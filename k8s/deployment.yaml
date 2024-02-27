@@ -4,7 +4,6 @@ metadata:
   name: symfony
   namespace: default # Namespace to deploy the application
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: symfony
@@ -16,6 +15,10 @@ spec:
       # Image pull secret to access private registry
       imagePullSecrets:
         - name: regcred
+      initContainers:
+        - name: migration
+          image: ileriayo/symfony:v1
+          command: ['sh', '-c', 'php bin/console doctrine:migrations:migrate --no-interaction']
       containers:
         - name: symfony
           image: ileriayo/symfony:v1
@@ -28,3 +31,8 @@ spec:
               value: "2ca64f8d83b9e89f5f19d672841d6bb8"
             - name: "DATABASE_URL"
               value: "sqlite:///%kernel.project_dir%/data/database.sqlite"
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m

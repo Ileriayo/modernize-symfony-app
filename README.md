@@ -145,3 +145,43 @@ cd my_project/
     kubectl port-forward pod/symfony-6794fb6cff-5cfck 8000:8000
     ```
    
+4. Create HPA - Scaling issues
+
+    When the load increases, we want to also have the pods automatically increase to match demand. Therefore if there is increased load, horizontal scaling deploys more pods to handle the said load. Similarly, if the load decreases, and the number of pods is above the configured minimum, the hpa will work to ensure that it scales down.
+
+    First, we need to install metric server (if it does not already exist) in the cluster. This exposes metrics through the Kubernetes API. To install Metric Server, download the manifest using:
+    ```
+    wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    ```
+    Update the manifest file and include the arg: `--kubelet-insecure-tls`
+
+    Then apply the manifest to the cluster:
+    ```
+    kubectl apply -f k8s/components.yaml
+    ```
+
+    Check the status of the metric-server using the following command:
+    ```
+    kubectl -n kube-system get deployments metrics-server
+    ```
+
+    Once the metric server is in a ready state, create the autoscaler
+    ```
+    kubectl apply -f k8s/hpa.yaml
+    ```
+    The above autoscaler maintains an average cpu utilization across all pods of 50%. Get the status of the autoscaler using:
+    ```
+    kubectl get hpa
+    ```
+
+
+    
+    To test the above, we can simulate increased load by running the following in a separate terminal:
+    ```
+    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://symfony; done"
+    ```
+
+    Watch the hpa in a different terminal:
+    ```
+    kubectl get hpa symfony --watch
+    ```
