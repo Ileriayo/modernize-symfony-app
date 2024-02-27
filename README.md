@@ -185,7 +185,7 @@ cd my_project/
     
     To test the above, we can simulate increased load by running the following in a separate terminal:
     ```
-    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://symfony; done"
+    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://symfony:8000; done"
     ```
 
     Watch the hpa in a different terminal:
